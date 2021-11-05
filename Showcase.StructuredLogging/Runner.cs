@@ -31,12 +31,12 @@ namespace TehGM.Showcase.StructuredLogging
             try
             {
                 // log some initial info
-                this._log.LogTrace($"{watch.ElapsedMilliseconds}: Method {nameof(IHostedService.StartAsync)}");
-                this._log.LogInformation($"{watch.ElapsedMilliseconds}: {this.GetType().Name} starting");
-                this._log.LogDebug($"{watch.ElapsedMilliseconds}: Time is {DateTime.Now.ToLongDateString()} {DateTime.Now.ToLongTimeString()}");
+                this._log.LogTrace("{Timer}: Method {Method}", watch.ElapsedMilliseconds, nameof(IHostedService.StartAsync));
+                this._log.LogInformation("{Timer}: {Service} starting", watch.ElapsedMilliseconds, this.GetType().Name);
+                this._log.LogDebug("{Timer}: Time is {Date} {Time}", watch.ElapsedMilliseconds, DateTime.Now.ToLongDateString(), DateTime.Now.ToLongTimeString());
 
                 // cancel tasks after a few seconds
-                this._log.LogWarning($"{this.GetType().Name} will cancel after {this._options.CancellationDelay}.");
+                this._log.LogWarning("{Service} will cancel after {Delay}.", this.GetType().Name, this._options.CancellationDelay);
                 using CancellationTokenSource cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
                 cts.CancelAfter(this._options.CancellationDelay);
 
@@ -44,16 +44,16 @@ namespace TehGM.Showcase.StructuredLogging
                 for (; ; )
                 {
                     await Task.Delay(this._options.TickDelay, cts.Token).ConfigureAwait(false);
-                    this._log.LogDebug($"{watch.ElapsedMilliseconds}: Tick.");
+                    this._log.LogDebug("{Timer}: Tick.", watch.ElapsedMilliseconds);
                 }
             }
             catch (Exception ex)
             {
-                this._log.LogError(ex, $"Exception of type {ex.GetType().Name} occured when running {this.GetType().Name}");
+                this._log.LogError(ex, "Exception of type {Type} occured when running {Service}", ex.GetType().Name, this.GetType().Name);
             }
             finally
             {
-                this._log.LogInformation($"{watch.ElapsedMilliseconds}: {this.GetType().Name} stopping");
+                this._log.LogInformation("{Timer}: {Service} stopping", watch.ElapsedMilliseconds, this.GetType().Name);
             }
         }
 
