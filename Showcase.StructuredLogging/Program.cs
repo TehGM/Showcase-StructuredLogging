@@ -22,6 +22,7 @@ namespace TehGM.Showcase.StructuredLogging
                     => config.ReadFrom.Configuration(context.Configuration, "Logging"))
                 .ConfigureServices((context, services) =>
                 {
+                    services.Configure<RunnerOptions>(context.Configuration);
                     services.AddHostedService<Runner>();
                 })
                 .Build();
