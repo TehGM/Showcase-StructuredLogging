@@ -28,7 +28,7 @@ namespace TehGM.Showcase.StructuredLogging
             {
                 // log messages here
             }
-            catch (OperationCanceledException ex)
+            catch (Exception ex)
             {
                 // log exception here
             }
