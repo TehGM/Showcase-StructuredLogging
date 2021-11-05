@@ -19,8 +19,7 @@ namespace TehGM.Showcase.StructuredLogging
                     config.AddJsonFile($"appsecrets.{context.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: true);
                 })
                 .UseSerilog((context, config)
-                    => config.ReadFrom.Configuration(context.Configuration, "Logging"),
-                    preserveStaticLogger: true)
+                    => config.ReadFrom.Configuration(context.Configuration, "Logging"))
                 .ConfigureServices((context, services) =>
                 {
                     services.AddHostedService<Runner>();
