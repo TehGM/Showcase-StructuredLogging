@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using System;
 using System.Threading.Tasks;
 
 namespace TehGM.Showcase.StructuredLogging
@@ -18,8 +19,25 @@ namespace TehGM.Showcase.StructuredLogging
                     config.AddJsonFile("appsecrets.json", optional: true, reloadOnChange: true);
                     config.AddJsonFile($"appsecrets.{context.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: true);
                 })
-                .UseSerilog((context, config)
-                    => config.ReadFrom.Configuration(context.Configuration, "Logging"))
+                .UseSerilog((context, config) =>
+                {
+                    config.ReadFrom.Configuration(context.Configuration, "Logging");
+
+                    DatadogOptions ddOptions = context.Configuration.GetSection("Logging").GetSection("DataDog").Get<DatadogOptions>();
+                    if (!string.IsNullOrWhiteSpace(ddOptions?.ApiKey))
+                    {
+                        config.WriteTo.DatadogLogs(
+                            ddOptions.ApiKey,
+                            source: ".NET",
+                            service: ddOptions.ServiceName,
+                            host: ddOptions.HostName ?? Environment.MachineName,
+                            new string[] {
+                                $"env:{ddOptions.EnvironmentName ?? context.HostingEnvironment.EnvironmentName}"
+                            },
+                            ddOptions.ToDatadogConfiguration()
+                        );
+                    }
+                })
                 .ConfigureServices((context, services) =>
                 {
                     services.Configure<RunnerOptions>(context.Configuration);

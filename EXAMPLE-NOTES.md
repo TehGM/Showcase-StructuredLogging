@@ -1,12 +1,9 @@
-# 5 - Log scopes
-It is possible to create a log scope with set of key and value pairs. Doing so has 2 significant benefits:
-- These key-value pairs will be present in the log object (for example in DB), even if they're not used in log message.
-- Logger will automatically resolve placeholders from log scope if they're not provided manually in the method.
+# 6 - DataDog
+Logging to files and databases is useful, and already really powerful. However it is possible to make it even better.
 
-## Scopes and Exceptions
-C# has a quirk that exception handling code will run in a completely different scope than the calling method - this means that log scope will not be preserved.
+There are many logging aggregation services available on the internet. They usually provide rich tools for logs filtering, searching and alerting. I personally use `DataDog`, which in addition to logs intake, also support monitoring of RAM, Disk Space, CPU use etc via installable agents.
 
-However there's a way to work it around, and that's by abusing `catch`'s `when` expression. The code for this expression runs in the parent scope, so all properties end up being added to the log object!  
-To make it easy, I tend to create a set of extension methods for `Exception` type that simply log the message and return true, making them usable with `when` clause.
+Fun fact: that's how I discovered that Raspbian default UI leaks memory, and managed to fix it by restarting UI service every night - without DataDog, I'd probably still have my Raspberry Pis die on me 2 times a month!
 
-There's unfortunately one more quirk - placeholders for log messages in `catch` and `finally` blocks aren't automatically populated from log scope (in fact, not providing them manually causes log to not be logged at all!). Perhaps there is a solution to this, but I didn't find it yet.
+## Config
+DataDog sink allows configuration just like other sinks, but I personally choose to create my own options class, and register the sink with Serilog in code. This allows me to resolve parameters like host name programmatically at runtime.
