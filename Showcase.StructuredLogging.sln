@@ -5,6 +5,11 @@ VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Showcase.StructuredLogging", "Showcase.StructuredLogging\Showcase.StructuredLogging.csproj", "{86ECC21B-A7B6-4F0B-B649-2E769AC86354}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{15DA470C-202A-4A61-A8F5-13291278EFDF}"
+	ProjectSection(SolutionItems) = preProject
+		EXAMPLE-NOTES.md = EXAMPLE-NOTES.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
