@@ -36,7 +36,7 @@ namespace TehGM.Showcase.StructuredLogging
                 this._log.LogDebug("{Timer}: Time is {Date} {Time}", watch.ElapsedMilliseconds, DateTime.Now.ToLongDateString(), DateTime.Now.ToLongTimeString());
 
                 // cancel tasks after a few seconds
-                this._log.LogWarning("{Service} will cancel after {Delay}.", this.GetType().Name, this._options.CancellationDelay);
+                this._log.LogWarning("{Service} will cancel after {Delay} seconds.", this.GetType().Name, this._options.CancellationDelay.TotalSeconds);
                 using CancellationTokenSource cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
                 cts.CancelAfter(this._options.CancellationDelay);
 
